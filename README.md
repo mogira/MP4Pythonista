@@ -10,5 +10,5 @@ Music Player for "Pythonista 3"
 
 ## Installation
 
-    $ git clone https://github.com/mogira/MP4Pythonista.git
+    $ git clone https://github.com/mogira/MP4Pythonista.git MP4Pythonista
 
