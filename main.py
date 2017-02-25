@@ -5,11 +5,15 @@ from objc_util import NSBundle, ObjCClass
 import inspect
 
 def dp(o):
-	print(o.__class__.__name__)
-	if hasattr(o, '__call__'):
-		print(inspect.getargspec(o))
-	else:
-		print(dir(o))
+	try:
+		cname = o._get_objc_classname()
+		cname = cname.decode('utf-8')
+	except AttributeError:
+		cname = 'Non-Objective-C object'
+	finally:
+		for i in dir(o):
+			print(i);
+		print('[%s]\n' % cname)
 
 def printItems(ls, verbose=False):
 	for item in ls:
