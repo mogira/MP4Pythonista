@@ -15,6 +15,14 @@ def dp(o):
 			print(i);
 		print('[%s]\n' % cname)
 
+def printMediaItem(item, verbose=False):
+	print(item.title())
+	if verbose:
+		print('- artist: %s' % item.artist())
+		print('- albumTitle: %s' % item.albumTitle())
+		print('- persistentID: %d' % item.persistentID())
+		print('- isCloudItem: %r' % item.isCloudItem())
+
 def printItemCollections(ls, verbose=False):
 	for item in ls:
 		try:
@@ -27,13 +35,7 @@ def printItemCollections(ls, verbose=False):
 				raise
 			except:
 				raise
-
-		print(item.title())
-		if verbose:
-			print('- artist: %s' % item.artist())
-			print('- albumTitle: %s' % item.albumTitle())
-			print('- persistentID: %d' % item.persistentID())
-			print('- isCloudItem: %r' % item.isCloudItem())
+		printMediaItem(item, verbose)
 	print()
 
 def createFilter(property, value, is_contains=0):
