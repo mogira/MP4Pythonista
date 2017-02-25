@@ -15,8 +15,19 @@ def dp(o):
 			print(i);
 		print('[%s]\n' % cname)
 
-def printItems(ls, verbose=False):
+def printItemCollections(ls, verbose=False):
 	for item in ls:
+		try:
+			item.title()
+		except AttributeError: #collections?
+			try:
+				item = item.items()[0] #item position in collections()[i]
+			except AttributeError:
+				print('Neither items nor collections.')
+				raise
+			except:
+				raise
+
 		print(item.title())
 		if verbose:
 			print('- artist: %s' % item.artist())
@@ -46,6 +57,4 @@ if __name__ == '__main__':
 	player.setQueueWithQuery(mq)
 	player.prepareToPlay()
 	#player.play()
-	
-	printItems(mq.items())
 
