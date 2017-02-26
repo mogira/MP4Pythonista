@@ -60,3 +60,4 @@ if __name__ == '__main__':
 	player.prepareToPlay()
 	#player.play()
 
+	print()
