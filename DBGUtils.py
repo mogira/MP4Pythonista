@@ -10,7 +10,7 @@ def dp(o):
 		cname = 'Non-Objective-C object'
 	finally:
 		for i in dir(o):
-			print(i);
+			print("'%s'" % i)
 		print('[%s]\n' % cname)
 
 def printMediaItem(item, verbose=False):
@@ -19,7 +19,6 @@ def printMediaItem(item, verbose=False):
 		print('- artist: %s' % item.artist())
 		print('- albumTitle: %s' % item.albumTitle())
 		print('- persistentID: %d' % item.persistentID())
-		print('- isCloudItem: %r' % item.isCloudItem())
 
 def printItemCollections(ls, verbose=False):
 	for item in ls:

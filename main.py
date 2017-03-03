@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	mq.addFilterPredicate(f0)
 	
 	player.setQueueWithQuery(mq)
-	#player.prepareToPlay()
+	player.prepareToPlay()
 	#player.play()
 
 	print()
