@@ -8,6 +8,8 @@ import MPUtils
 if __name__ == '__main__':
 	MPUtils.init()
 	
+	printItemCollections(MPUtils.getNowPlayingQueue())
+	
 	player = MPUtils.getPlayer()
 	mq = ObjCClass('MPMediaQuery').songsQuery()
 	
@@ -18,4 +20,5 @@ if __name__ == '__main__':
 	player.prepareToPlay()
 	#player.play()
 
-	print()
+	print('↑ will be rewrited to ↓\n')
+	printItemCollections(player.queueAsQuery().items())

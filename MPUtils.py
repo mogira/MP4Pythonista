@@ -9,6 +9,13 @@ def init():
 def getPlayer():
 	return ObjCClass('MPMusicPlayerController').systemMusicPlayer()
 
+def getNowPlayingQueue():
+	p = getPlayer()
+	q = []
+	for i in range(p.numberOfItems()):
+		q.append(p.nowPlayingItemAtIndex(i))
+	return q
+
 def createFilter(property, value, is_contains=0):
 	mpp = ObjCClass('MPMediaPropertyPredicate').alloc()
 	mpp.setProperty(property)
