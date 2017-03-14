@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals
-from objc_util import NSBundle, ObjCClass
+from objc_util import *
 
-def init():
-	NSBundle.bundleWithPath_('/System/Library/Frameworks/MediaPlayer.framework').load()
-
-def getPlayer():
-	return ObjCClass('MPMusicPlayerController').systemMusicPlayer()
-
-def getNowPlayingQueue():
-	p = getPlayer()
+def getNowPlayingQueue(player):
+	p = player
 	q = []
 	for i in range(p.numberOfItems()):
 		q.append(p.nowPlayingItemAtIndex(i))

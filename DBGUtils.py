@@ -34,3 +34,7 @@ def printItemCollections(ls, verbose=False):
 				raise
 		printMediaItem(item, verbose)
 	print()
+	
+if __name__=='__main__':
+	from objc_util import *
+	print()

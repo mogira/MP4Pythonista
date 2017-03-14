@@ -3,28 +3,31 @@
 from __future__ import print_function, unicode_literals
 from objc_util import *
 
-class MPObserver:
+class NotificationController:
 	def __init__(self, l_mpc):
-		def willResignActive(_self, _cmd):
-			l_mpc.onWillResignActive()
-		def didBecomeActive(_self, _cmd):
-			l_mpc.onDidBecomeActive()
-		def playbackStateDidChange(_self, _cmd):
-			l_mpc.onPlaybackStateDidChange()
-		def nowPlayingItemDidChange(_self, _cmd):
-			l_mpc.onNowPlayingItemDidChange()
 		self.mpc = l_mpc
+		def willResignActive(_self, _cmd):
+			pass
+		def didBecomeActive(_self, _cmd):
+			pass
+		def playbackStateDidChange(_self, _cmd):
+			pass
+		def nowPlayingItemDidChange(_self, _cmd):
+			pass
+		def MP4PWillClose(_self, _cmd):
+			self.removeAllObservers()
 		self.nmo = create_objc_class(
-			'NSMPObserver',
-			methods = [
-				willResignActive,
-				didBecomeActive,
-				playbackStateDidChange,
-				nowPlayingItemDidChange
-			]
-		).alloc()
+				'MP4PNotificationController',
+				methods = [
+					willResignActive,
+					didBecomeActive,
+					playbackStateDidChange,
+					nowPlayingItemDidChange,
+					MP4PWillClose
+				]
+			).alloc()
 		self.nc = ObjCClass('NSNotificationCenter').defaultCenter()
-	def addAllObservers(self):
+	def registerAllObservers(self):
 		self.nc.addObserver_selector_name_object_(
 			self.nmo,
 			sel('willResignActive'),
@@ -49,6 +52,12 @@ class MPObserver:
 			'MPMusicPlayerControllerNowPlayingItemDidChangeNotification',
 			None
 		)
+		self.nc.addObserver_selector_name_object_(
+			self.nmo,
+			sel('MP4PWillClose'),
+			'MP4PythonistaWillCloseNotification',
+			None
+		)
 		self.mpc.player.beginGeneratingPlaybackNotifications()
 	def removeAllObservers(self):
 		self.nc.removeObserver_name_object_(
@@ -71,25 +80,10 @@ class MPObserver:
 			'MPMusicPlayerControllerNowPlayingItemDidChangeNotification',
 			None
 		)
+		self.nc.removeObserver_name_object_(
+			self.nmo,
+			'MP4PythonistaWillCloseNotification',
+			None
+		)
 		self.mpc.player.endGeneratingPlaybackNotifications()
 
-if __name__=='__main__':
-	from objc_util import NSBundle
-	
-	NSBundle.bundleWithPath_('/System/Library/Frameworks/MediaPlayer.framework').load()
-	
-	class TestClass:
-		def __init__(self):
-			self.player = ObjCClass('MPMusicPlayerController').systemMusicPlayer()
-		def onWillResignActive(self):
-			print('willResignActive')
-		def onDidBecomeActive(self):
-			print('didBecomeActive')
-		def onPlaybackStateDidChange(self):
-			print('playbackStateDidChange')
-		def onNowPlayingItemDidChange(self):
-			print('nowPlayingItemDidChange')
-	
-	c = TestClass()
-	d = MPObserver(c)
-	print("MPObserver is set in 'd'")
