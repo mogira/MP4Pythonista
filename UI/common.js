@@ -19,14 +19,3 @@
 	);
 })();
 
-function setTouchListener(cmd_name) {
-	document.getElementById(cmd_name)
-		.addEventListener(
-			'touchstart',
-			function(e){
-				location.href =
-					'app://' + cmd_name;
-			},
-			false
-	);
-}

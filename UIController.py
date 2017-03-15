@@ -1,68 +1,49 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals
-from objc_util import *
 import ui
 import time
 import re
 import os
+from urllib.parse import urlparse, parse_qs
 
 class UIController(object):
-	def __init__(self, l_mpc, ui_file):
-		self.mpc = l_mpc
-		self.wv = ui.WebView()
+	def __init__(self, l_mpc, ui_file_path):
+		self._mpc = l_mpc
+		self._wv = ui.WebView()
+		self._filepath = ui_file_path
+	def start(self):
 		try:
-			f = open(ui_file, 'r')
+			f = open(self._filepath, 'r')
 			html_data = f.read()
 			f.close()
 		except:
-			print('Fail to open "%s"'%ui_file)
+			print('Fail to open "%s"' % self._filepath)
 			raise
 		t = str(time.time()).split('.')[0]
-		html_data = re.sub('BASEPATH', "file://"+os.path.dirname(os.path.abspath(ui_file)), html_data)
+		html_data = re.compile('BASEPATH', re.I|re.M).sub("file://"+os.path.dirname(os.path.abspath(self._filepath)), html_data)
 		html_data = re.compile(r'(\.css|\.js)', re.I|re.M).sub(r'\1?v='+t, html_data)
-		self.wv.delegate = self
-		self.wv.load_html(html_data)
+			#external css and javascript file is cached, and cannot delete easily.
+			#so use "file://" scheme and abspath and Cache Busting.
+			#in this function, 'BASEPATH' string in ui_file is replaced to os.path.dirname(ui_file).
+		self._wv.delegate = self
+		self._wv.load_html(html_data)
 		print(html_data)
-		#external css and javascript file is cached, and cannot delete easily.
-		#so use "file://" scheme and abspath and Cache Busting.
-		#in this function, 'BASEPATH' string in ui_file is replaced to os.path.dirname(ui_file).
-	def showView(self):
-		self.wv.present(hide_title_bar=True)
-	def cmdProc(self, com):
-			print(com)
-			ar = ['Stopped', 'Playing', 'Paused', 'Interrupted', 'SeekingForward', 'SeekingBackward']
-			if com=='close':
-				self.wv.close()
-				self.wv.delegate = None
-				self.wv.stop()
-				self.wv = None
-				ObjCClass('NSNotificationCenter').defaultCenter().postNotification(
-						ObjCClass('NSNotification').notificationWithName_object_userInfo_('CustomMPCloseNotification', None, None)
-				)
-			elif com=='playstop':
-				state = self.mpc.player.playbackState()
-				if state==0 or state==2:
-					self.mpc.player.play()
-					self.wv.eval_js('document.getElementById("playstop").className = "PlaybackState-Playing";')
-				elif (state==1):
-					self.mpc.player.pause()
-					self.wv.eval_js('document.getElementById("playstop").className = "PlaybackState-Paused";')
-			elif com=='updatePlaybackState':
-				state = self.mpc.player.playbackState()
-				self.wv.eval_js('updatePlaybackState("'+ar[state]+'");')
-			elif com=='next':
-				self.mpc.player.skipInDirection_error_(1, None)
-			else:
-				return
+		self._wv.present(hide_title_bar=True)
+	def stop(self):
+		self._wv.delegate = None
+		self._wv.close()
+		self._wv.stop()
+		self._wv = None
+	def eval_js(self, str):
+		self._wv.eval_js(str);
 	def webview_should_start_load(self, webview, url, nav_type):
-		tmp = url.split(':')
-		scheme = tmp[0]
-		if scheme == 'app':
-			com = tmp[1].split('/')[-1]
-			self.cmdProc(com)
+		u = urlparse(url)
+		if u.scheme == 'app':
+			self._mpc.cmdProc(u.netloc, parse_qs(u.query))
 			return False
-		return True
+		else:
+			return True
 	def webview_did_start_load(self, webview):
 		pass
 	def webview_did_finish_load(self, webview):

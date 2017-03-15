@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals
-from objc_util import *
+from objc_util import ObjCClass, create_objc_class, sel
 
 class NotificationController:
 	def __init__(self, l_mpc):
-		self.mpc = l_mpc
+		self._mpc = l_mpc
 		def willResignActive(_self, _cmd):
 			pass
 		def didBecomeActive(_self, _cmd):
@@ -14,9 +14,7 @@ class NotificationController:
 			pass
 		def nowPlayingItemDidChange(_self, _cmd):
 			pass
-		def MP4PWillClose(_self, _cmd):
-			self.removeAllObservers()
-		self.method_table = {
+		self._method_table = {
 			'UIApplicationWillResignActiveNotification'
 				: willResignActive,
 			'UIApplicationDidBecomeActiveNotification'
@@ -25,29 +23,30 @@ class NotificationController:
 				: playbackStateDidChange,
 			'MPMusicPlayerControllerNowPlayingItemDidChangeNotification'
 				: nowPlayingItemDidChange,
-			'MP4PythonistaWillCloseNotification'
-				: MP4PWillClose,
 		}
-		self.mp4p_nc = create_objc_class(
-				'MP4PNotificationController',
-				methods = self.method_table.values()
-		).alloc()
-		self.ndc = ObjCClass('NSNotificationCenter').defaultCenter()
+		try:
+			self._mp4p_nc = ObjCClass('NSMP4PNotificationController')
+		except ValueError:
+			self._mp4p_nc = create_objc_class(
+				'NSMP4PNotificationController',
+				methods = self._method_table.values()
+			)
+		self._ndc = ObjCClass('NSNotificationCenter').defaultCenter()
+
 	def registerAllObservers(self):
-		for k,v in self.method_table.items():
-			self.ndc.addObserver_selector_name_object_(
-				self.mp4p_nc,
+		for k,v in self._method_table.items():
+			self._ndc.addObserver_selector_name_object_(
+				self._mp4p_nc,
 				sel(v.__name__),
 				k,
 				None
 			)
-		self.mpc.player.beginGeneratingPlaybackNotifications()
+
 	def removeAllObservers(self):
-		for k in self.method_table.keys():
-			self.ndc.removeObserver_name_object_(
-				self.mp4p_nc,
+		for k in self._method_table.keys():
+			self._ndc.removeObserver_name_object_(
+				self._mp4p_nc,
 				k,
 				None
 			)
-		self.mpc.player.endGeneratingPlaybackNotifications()
 

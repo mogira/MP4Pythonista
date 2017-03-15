@@ -1,25 +1,22 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Cache-Control" content="no-cache">
 		<meta name="viewport" content="user-scalable:no;">
-		<base href="BASEPATH/UI.html" target='_self'>
 		<link rel="stylesheet" href="BASEPATH/common.css" type="text/css">
 		<link rel="stylesheet" href="BASEPATH/UI.css" type+"text/css">
 	</head>
 	<body>
 		<div style="text-align:center; width:100%;">
-			<a href="app://close" style="font-size:80px; color:white; text-decoration:none;">Tap to close</a>
-			<div id='playstop' class='PlaybackState-Playing'>&nbsp;</div>
+			<div id='btnClose'>Tap to close</div>
+			<div id='btnPlayPause' class='PlaybackState-Playing'>&nbsp;</div>
 		</div>
 		<script src="BASEPATH/common.js"></script>
+		<script src="BASEPATH/UI.js"></script>
 		<script>
-			setTouchListener('playstop');
+			setTouchListener('btnClose', 'close');
+			setTouchListener('btnPlayPause', 'togglePlayPause');
+
 			location.href = 'app://updatePlaybackState';
-			function updatePlaybackState(state) {
-				document.getElementById('playstop').className = 'PlaybackState-'+state;
-			}
 		</script>
 	</body>
 </html>
