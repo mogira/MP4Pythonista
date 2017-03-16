@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import print_function, unicode_literals
+
 from objc_util import ObjCClass, create_objc_class, sel
+
 
 class NotificationController:
 	def __init__(self, l_mpc):
 		self._mpc = l_mpc
+		self._ndc = ObjCClass('NSNotificationCenter').defaultCenter()
 		def willResignActive(_self, _cmd):
 			pass
 		def didBecomeActive(_self, _cmd):
@@ -31,7 +33,6 @@ class NotificationController:
 				'NSMP4PNotificationController',
 				methods = self._method_table.values()
 			)
-		self._ndc = ObjCClass('NSNotificationCenter').defaultCenter()
 
 	def registerAllObservers(self):
 		for k,v in self._method_table.items():
