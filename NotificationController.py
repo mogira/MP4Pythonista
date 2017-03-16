@@ -15,7 +15,7 @@ class NotificationController:
 		def playbackStateDidChange(_self, _cmd):
 			self._mpc.updatePlaybackState()
 		def nowPlayingItemDidChange(_self, _cmd):
-			pass
+			self._mpc.setNowPlayingSongArtwork()
 		self._method_table = {
 			'UIApplicationWillResignActiveNotification'
 				: willResignActive,

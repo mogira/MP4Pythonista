@@ -6,17 +6,20 @@
 		<link rel="stylesheet" href="BASEPATH/UI.css" type+"text/css">
 	</head>
 	<body>
-		<div style="text-align:center; width:100%;">
-			<div id='btnClose'>Tap to close</div>
-			<div id='btnPlayPause' class='PlaybackState-Playing'>&nbsp;</div>
+		<div id='btnClose'>Tap to close</div>
+		<div id='boxNowPlayingSongArtwork'>
+			<img id='NowPlayingSongArtwork'>
 		</div>
+		<div id='btnPlayPause'>PlayState</div>
+
 		<script src="BASEPATH/common.js"></script>
 		<script src="BASEPATH/UI.js"></script>
 		<script>
 			setTouchListener('btnClose', 'close');
 			setTouchListener('btnPlayPause', 'togglePlayPause');
 
-			location.href = 'app://updatePlaybackState';
+			location.href
+				= 'app://init_params?thumb_size=600'
 		</script>
 	</body>
 </html>

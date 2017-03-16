@@ -7,10 +7,24 @@ function setTouchListener(_id, _cmd) {
 					'app://' + _cmd;
 			},
 			false
-	);
+	)
 }
 
-function updatePlaybackState(state) {
-	document.getElementById('btnPlayPause').className
-		= 'PlaybackState-' + state;
+function updatePlaybackState(_state) {
+	let elem = document.getElementById('btnPlayPause')
+	elem.className = 'PlaybackState-' + _state;
+	elem.textContent = _state;
 }
+
+function setImageWithBase64(_id, _base64String) {
+	try {
+		document.getElementById(_id).src = 'data:image/png;base64,' + _base64String;
+	} catch (e) {
+		alert(e);
+	}
+}
+
+function setNowPlayingSongArtwork(_base64String) {
+	setImageWithBase64('NowPlayingSongArtwork', _base64String);
+}
+
