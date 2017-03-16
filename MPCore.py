@@ -48,16 +48,20 @@ class MPCore:
 		self._npc.play_pause()
 
 	def setNowPlayingSongArtwork(self, _=None):
-		img = self._npc.now_playing.artwork(brep=False)
-		if not img.size[0] == img.size[1]:
-			smaller = min(img.size[0], img.size[1])
-			img = img.crop((
-				int((img.size[0] - smaller) / 2.0),
-				int((img.size[1] - smaller) / 2.0),
-				int((img.size[0] + smaller) / 2.0),
-				int((img.size[1] + smaller) / 2.0)
-			))
-		img.thumbnail((self.thumb_size, self.thumb_size), Image.ANTIALIAS)
+		img = None
+		if not self._npc.now_playing == None:
+			img = self._npc.now_playing.artwork(brep=False)
+			if not img.size[0] == img.size[1]:
+				smaller = min(img.size[0], img.size[1])
+				img = img.crop((
+					int((img.size[0] - smaller) / 2.0),
+					int((img.size[1] - smaller) / 2.0),
+					int((img.size[0] + smaller) / 2.0),
+					int((img.size[1] + smaller) / 2.0)
+				))
+			img.thumbnail((self.thumb_size, self.thumb_size), Image.ANTIALIAS)
+		else:
+			img = Image.new('1', (self.thumb_size, self.thumb_size), (1))
 		buf = BytesIO()
 		img.save(buf, format='PNG')
 		self._uic.eval_js(
@@ -76,4 +80,7 @@ class MPCore:
 			self._uic.eval_js(
 				'pick_cmd();'
 			)
-		
+
+if __name__ == '__main__':
+	MPCore('UI/UI.html').start()
+
