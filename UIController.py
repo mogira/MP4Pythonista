@@ -14,6 +14,11 @@ class UIController(object):
 		self._wv = ui.WebView()
 		self._filepath = ui_file_path
 
+	def __del__(self):
+		del self._filepath
+		del self._wv
+		del self._mpc
+
 	def start(self):
 		try:
 			f = open(self._filepath, 'r')
@@ -23,10 +28,12 @@ class UIController(object):
 			print('Fail to open "%s"' % self._filepath)
 			raise
 		t = str(time.time()).split('.')[0]
-		html_data = re.compile('BASEPATH', re.I|re.M)
-		              .sub("file://" + os.path.dirname(os.path.abspath(self._filepath)), html_data)
-		html_data = re.compile(r'(\.css|\.js)', re.I|re.M)
-		              .sub(r'\1?v='+t, html_data)
+		html_data = re\
+			.compile('BASEPATH', re.I|re.M)\
+			.sub("file://" + os.path.dirname(os.path.abspath(self._filepath)), html_data)
+		html_data = re\
+			.compile(r'(\.css|\.js)', re.I|re.M)\
+			.sub(r'\1?v='+t, html_data)
 			#external css and javascript file is cached, and cannot be deleted easily.
 			#so use "file://" scheme and abspath and Cache Busting.
 			#in this function, 'BASEPATH' string in ui_file is replaced to os.path.dirname(ui_file).
@@ -39,7 +46,6 @@ class UIController(object):
 		self._wv.delegate = None
 		self._wv.close()
 		self._wv.stop()
-		self._wv = None
 
 	def eval_js(self, str):
 		self._wv.eval_js(str);
