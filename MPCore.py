@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 from objc_util import NSBundle, ObjCClass
-from objc_tools.music import NowPlayingController, PlaybackState
+from objc_tools import NowPlayingController, PlaybackState
 
 from NotificationController import NotificationController
 from UIController import UIController
@@ -25,19 +25,18 @@ class MPCore:
 		self._uic.stop()
 		self._player.endGeneratingPlaybackNotifications()
 		self._nc.removeAllObservers()
-		del self._npc
-		del self._uic
-		del self._nc
-		del self._player
 
-	def updatePlaybackState(self):
+	def updatePlaybackState(self, state=-1):
 		ar = ['Stopped', 'Playing', 'Paused', 'Interrupted', 'SeekingForward', 'SeekingBackward']
+		if state == -1:
+			state = self._npc.state
 		self._uic.eval_js(
-			'updatePlaybackState("' + self._npc.state.name + '");'
+			'updatePlaybackState("' + ar[state] + '");'
 		)
 
 	def togglePlayPause(self):
 		self._npc.play_pause()
+		self.updatePlaybackState(state=self._npc.state)
 
 	def cmdProc(self, cmd, query):
 		print('%s: %s' % (cmd, query))

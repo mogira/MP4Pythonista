@@ -13,7 +13,7 @@ class NotificationController:
 		def didBecomeActive(_self, _cmd):
 			pass
 		def playbackStateDidChange(_self, _cmd):
-			self._mpc.updatePlaybackState()
+			pass
 		def nowPlayingItemDidChange(_self, _cmd):
 			pass
 		self._method_table = {
@@ -26,15 +26,13 @@ class NotificationController:
 			'MPMusicPlayerControllerNowPlayingItemDidChangeNotification'
 				: nowPlayingItemDidChange,
 		}
-		self._mp4p_nc = create_objc_class(
-			'NSMP4PNotificationController',
-			methods = self._method_table.values()
-		).new()
-
-	def __del__(self):
-		del self._mp4p_nc
-		del self._method_table
-		del self._ndc
+		try:
+			self._mp4p_nc = ObjCClass('NSMP4PNotificationController')
+		except ValueError:
+			self._mp4p_nc = create_objc_class(
+				'NSMP4PNotificationController',
+				methods = self._method_table.values()
+			)
 
 	def registerAllObservers(self):
 		for k,v in self._method_table.items():
