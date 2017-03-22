@@ -19,6 +19,7 @@ class MPCore:
 		self._nc = NotificationController(self)
 		self._uic = UIController(self, ui_file_path)
 		self._npc = NowPlayingController()
+		self.thumb_size = 0
 
 	def start(self):
 		self._nc.registerAllObservers()
@@ -48,7 +49,6 @@ class MPCore:
 		self._npc.play_pause()
 
 	def setNowPlayingSongArtwork(self, _=None):
-		img = None
 		if not self._npc.now_playing == None:
 			img = self._npc.now_playing.artwork(brep=False)
 			if not img.size[0] == img.size[1]:
@@ -59,9 +59,9 @@ class MPCore:
 					int((img.size[0] + smaller) / 2.0),
 					int((img.size[1] + smaller) / 2.0)
 				))
-			img.thumbnail((self.thumb_size, self.thumb_size), Image.ANTIALIAS)
+			img = img.resize((self.thumb_size, self.thumb_size), Image.ANTIALIAS)
 		else:
-			img = Image.new('1', (self.thumb_size, self.thumb_size), (1))
+			img = Image.new('RGB', (self.thumb_size, self.thumb_size), (0xFF, 0xFF, 0xFF))
 		buf = BytesIO()
 		img.save(buf, format='PNG')
 		self._uic.eval_js(
@@ -69,18 +69,25 @@ class MPCore:
 			%  base64.b64encode(buf.getvalue()).decode('ascii')
 		)
 
+	def skipNext(self, _=None):
+		self._npc.skip_next()
+
+	def skipPrev(self, _=None):
+		if self._player.currentPlaybackTime() < 1.5:
+			self._npc.skip_previous()
+		else:
+			self._npc.replay()
+
 	def cmdProc(self, cmd, query):
 		print('%s: %s' % (cmd, query))
 		try:
-			getattr(self, cmd)(query)
-		except:
-			print('Unknown Command')
-			raise
-		if not cmd == 'close':
+			m = getattr(self, cmd)
+		except AttributeError:
 			self._uic.eval_js(
-				'pick_cmd();'
+				r'alert("Unknown Command\n\"%s\"");' % cmd
 			)
-
-if __name__ == '__main__':
-	MPCore('UI/UI.html').start()
+		except:
+			raise
+		else:
+			m(query)
 

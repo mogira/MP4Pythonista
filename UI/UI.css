@@ -1,20 +1,21 @@
-#btnClose {
+div#btnClose {
 	margin: 0 auto;
 	font-size: 80px;
 	color: #FFFFFF;
 	background-color: #BBFFBB;
 	width: 50%;
+	text-align: center;
 }
 
-#NowPlayingSongArtwork {
-	border-radius: 10px;
+img#NowPlayingSongArtwork {
+	border-radius: 10%;
 	max-width: 600px;
 	max-height: 600px;
 	width: 600px;
 	height: auto;
 }
 
-#boxNowPlayingSongArtwork {
+div#boxNowPlayingSongArtwork {
 	position: absolute;
 	margin: auto;
 	bottom: 300;
@@ -23,28 +24,50 @@
 	text-align: center;
 }
 
-#btnPlayPause {
-	font-size: 55px;
-	width: 200px;
-	height: 200px;
+div#boxController {
 	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
+	width: 100%;
+	bottom: 50px;
 	display: flex;
-	align-items: center;
 	justify-content: center;
 }
 
-.PlaybackState-Playing {
+div#boxController > div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 55px;
+	height: 200px;
+	border-radius: 30%;
+}
+
+div#btnSkipToPrevious {
+	width: 200px;
+	background-color: #880000;
+	color: #FFFFFF;
+}
+
+div#btnPlayPause {
+	width: 300px;
+	margin: 0 100px;
+}
+
+div#btnSkipToNext {
+	width: 200px;
+	background-color: #000088;
+	color: #FFFFFF;
+}
+
+div.PlaybackState-Playing {
 	background-color: #AAAAAA;
 }
 
-.PlaybackState-Paused {
+div.PlaybackState-Paused {
 	background-color: #222222;
+	color: #FFFFFF;
 }
 
-.PlaybackState-Stopped {
+div.PlaybackState-Stopped{
 	background-color: #220022;
+	color: #FFFFFF;
 }

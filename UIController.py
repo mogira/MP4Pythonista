@@ -20,6 +20,7 @@ class UIController(object):
 		del self._mpc
 
 	def start(self):
+		print(self._filepath)
 		try:
 			f = open(self._filepath, 'r')
 			html_data = f.read()
@@ -30,7 +31,7 @@ class UIController(object):
 		t = str(time.time()).split('.')[0]
 		html_data = re\
 			.compile('BASEPATH', re.I|re.M)\
-			.sub("file://" + os.path.dirname(os.path.abspath(self._filepath)), html_data)
+			.sub("file://" + os.path.dirname(self._filepath), html_data)
 		html_data = re\
 			.compile(r'(\.css|\.js)', re.I|re.M)\
 			.sub(r'\1?v='+t, html_data)

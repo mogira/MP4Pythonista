@@ -10,13 +10,19 @@
 		<div id='boxNowPlayingSongArtwork'>
 			<img id='NowPlayingSongArtwork'>
 		</div>
-		<div id='btnPlayPause'>PlayState</div>
+		<div id='boxController'>
+			<div id='btnSkipToPrevious'>prev</div>
+			<div id='btnPlayPause'>PlayState</div>
+			<div id='btnSkipToNext'>next</div>
+		</div>
 
 		<script src="BASEPATH/common.js"></script>
 		<script src="BASEPATH/UI.js"></script>
 		<script>
 			setTouchListener('btnClose', 'close');
 			setTouchListener('btnPlayPause', 'togglePlayPause');
+			setTouchListener('btnSkipToPrevious', 'skipPrev');
+			setTouchListener('btnSkipToNext', 'skipNext');
 
 			location.href
 				= 'app://init_params?thumb_size=600'
