@@ -6,9 +6,12 @@ from DBGUtils import *
 from MPCore import MPCore
 
 
-if __name__ == '__main__':
+def main():
 	_path = os.path.dirname(os.path.abspath(__file__))
 	mpc = MPCore(_path + '/UI/UI.html')
 	#please abspath
 	mpc.start()
+
+if __name__ == '__main__':
+	main()
 

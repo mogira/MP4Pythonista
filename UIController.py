@@ -42,6 +42,7 @@ class UIController(object):
 		self._wv.load_html(html_data)
 		print(html_data)
 		self._wv.present(hide_title_bar=True)
+		
 
 	def stop(self):
 		self._wv.delegate = None
