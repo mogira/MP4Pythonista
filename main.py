@@ -8,8 +8,8 @@ from MPCore import MPCore
 
 def main():
 	_path = os.path.dirname(os.path.abspath(__file__))
-	mpc = MPCore(_path + '/UI/UI.html')
-	#please abspath
+	mpc = MPCore(_path + '/' + 'UI/index.html')
+	#give a abspath
 	mpc.start()
 
 if __name__ == '__main__':
