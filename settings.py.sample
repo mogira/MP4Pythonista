@@ -1,0 +1,4 @@
+ui = {
+	'dir' : 'UI',
+	'top_page' : 'index.html'
+}
