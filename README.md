@@ -12,7 +12,7 @@ Music Player for "Pythonista 3"
 
     $ git clone https://github.com/mogira/MP4Pythonista.git MP4Pythonista
 
-!!IMPORTANT!!
-If this is your first time to use, then you must write the settings based on "settings.py.sample".
-So remove the '.sample' from "settings.py.sample" and edit this settings.
+    !!IMPORTANT!!  
+    If this is your first time to use, then you must write the settings based on "settings.py.sample".  
+    So copy "settings.py.sample" to "settings.py" and edit this settings.
 
